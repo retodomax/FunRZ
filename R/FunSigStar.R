@@ -11,15 +11,15 @@ FunSigStar <- function(pval) {
   stars <- NULL
   for(i in 1:length(pval)){
     if (pval[i] <= 0.001) {
-      stars <- c(stars, "***")
+      stars <- c(stars, " ***")
     }
     else if (pval[i] <= 0.01) {
-      stars <- c(stars, " **")
+      stars <- c(stars, "  **")
     }
     else if (pval[i] <= 0.05) {
-      stars <- c(stars, "  *")
+      stars <- c(stars, "   *")
     }
-    else {stars <- c(stars, "   ")
+    else {stars <- c(stars, "    ")
     }
   }
   return(stars)

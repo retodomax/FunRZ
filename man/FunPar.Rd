@@ -9,19 +9,23 @@ FunPar(mar = c(3.5, 3.5, 2, 2), xaxs = "i", yaxs = "i", tcl = 0.4,
   cex = 0.9)
 }
 \arguments{
-\item{mar}{smaller plot margin}
+\item{mar}{smaller plot margin. default c(5.1, 4.1, 4.1, 2.1))}
 
-\item{xaxs}{do not add 4 percent to x axis' lim}
+\item{xaxs}{do not add 4 percent to x axis' lim. default "r"}
 
-\item{yaxs}{do not add 4 percent to y axis' lim}
+\item{yaxs}{do not add 4 percent to y axis' lim. default "r"}
 
-\item{tcl}{ticks look inside}
+\item{tcl}{ticks look inside. default -0.5}
 
-\item{las}{turn y axis labels}
+\item{las}{turn y axis labels. default 0}
 
-\item{mgp}{position of axis titles and labels in lines}
+\item{mgp}{position of axis titles and labels in lines. default c(3, 1, 0)}
 
-\item{lab}{preferd number of ticks (4 instead of 5)}
+\item{lab}{preferd number of ticks (4 instead of 5). default c(5, 5, 7)}
+
+\item{family}{prefered font family (Segoe). default ""}
+
+\item{cex}{prefered character expansion factor. default 1}
 }
 \value{
 invisible original par values

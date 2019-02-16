@@ -4,8 +4,8 @@
 \alias{FunTukeyHSD}
 \title{boxplots with cld}
 \usage{
-FunTukeyHSD(mod = y ~ x, data = dat, upp_mar = 4, col = NA, ylab = "",
-  xlab = "", main = "", las = 3, add_legend = F,
+FunTukeyHSD(mod = y ~ x, data = dat, upp_mar = 4, col = NA,
+  ylab = "", xlab = "", main = "", las = 3, add_legend = F,
   legend_pos = "topright", legend = NULL, fill = "white")
 }
 \arguments{
