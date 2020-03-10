@@ -14,6 +14,7 @@
 #' @param set_seed boolean. Automatically set a constant seed in the function
 #' @param change_mfrow boolean. Automatically adjust \code{mfrow} if
 #' \code{length(plots) > 1}
+#' @param plot_title boolean. Should there be a title above the figure.
 #'
 #' @return Nothing is returned. Plots are plotted
 #' @author Marcel Dettling
@@ -46,8 +47,9 @@
 #'
 #' @export
 FunResplot <- function(obj, plots=1:4,
-                    method = c("rnorm", "resampling"),
-                    num = 100, set_seed = F, change_mfrow = T) {
+                       method = c("rnorm", "resampling"),
+                       num = 100, set_seed = FALSE, change_mfrow = TRUE,
+                       plot_title = TRUE) {
   ## Last change: replaced all loess.smooth() with lowess()
   ##              since loess.smooth fits strange smoother in case of small
   ##              number of unique fitted values (not many unique x values)
@@ -59,6 +61,16 @@ FunResplot <- function(obj, plots=1:4,
     if (length(plots)==1) opar <- par(mfrow=c(1,1))
   }
 
+  ## Title vector
+  if(plot_title){
+    my_title <- c("Tukey-Anscombe Plot with Resampling",
+                  "Normal QQ Plot with Resampling",
+                  "Scale-Location Plot with Resampling",
+                  "Leverage Plot")
+  } else {
+    my_title <- vector("character", 4)
+  }
+
 
   ## Set random seed that plots look always the same
   if(set_seed) set.seed(21)
@@ -68,18 +80,18 @@ FunResplot <- function(obj, plots=1:4,
   {
     plot(fitted(obj), resid(obj), pch=20,
          xlab="Fitted Values", ylab="Residuals")
-    title("Tukey-Anscombe-Plot with Resampling")
+    title(my_title[1])
     if(method[1] == "rnorm"){
       for (i in 1:num){
         lines(lowess(fitted(obj),
-                           rnorm(length(fitted(obj)), 0, sigma(obj))),
+                     rnorm(length(fitted(obj)), 0, sigma(obj))),
               col="gray")
       }
     }
     if(method[1] == "resampling"){
       for (i in 1:num){
         lines(lowess(fitted(obj),
-                           sample(resid(obj, replace=TRUE))),
+                     sample(resid(obj, replace=TRUE))),
               col="grey")
       }
     }
@@ -92,8 +104,8 @@ FunResplot <- function(obj, plots=1:4,
   if (2 %in% plots)
   {
     qq <- qqnorm(rstandard(obj), pch=20,
-                 main="Normal Plot with Resampling",
-                 ylab="Standardized Residuals")
+                 main= my_title[2],
+                 ylab= "Standardized Residuals")
     for (i in 1:num){
       lines(sort(qq$x),
             sort(rnorm(length(qq$y), mean(qq$y), sd(qq$y))),
@@ -109,18 +121,18 @@ FunResplot <- function(obj, plots=1:4,
     plot(fitted(obj), sqrt(abs(rstandard(obj))), pch=20,
          ylab="sqrt(abs(Standardized Residuals))", xlab="Fitted Values",
          ylim=c(0, range(sqrt(abs(rstandard(obj))), na.rm=TRUE)[2]),
-         main="Scale-Location with Resampling")
+         main= my_title[3])
     if(method[1] == "rnorm"){
       for (i in 1:num){
         lines(lowess(fitted(obj),
-                           sqrt(abs(rnorm(length(fitted(obj)), 0, sd(rstandard(obj)))))),
+                     sqrt(abs(rnorm(length(fitted(obj)), 0, sd(rstandard(obj)))))),
               col="grey")
       }
     }
     if(method[1] == "resampling"){
       for (i in 1:num){
         lines(lowess(fitted(obj),
-                           sample(sqrt(abs(rstandard(obj))), replace=TRUE)),
+                     sample(sqrt(abs(rstandard(obj))), replace=TRUE)),
               col="grey")
       }
     }
@@ -132,7 +144,7 @@ FunResplot <- function(obj, plots=1:4,
   if (4 %in% plots)
   {
     plot(obj, which=5, pch=20, caption="")
-    title("Leverage Plot")
+    title(my_title[4])
   }
 
   if(change_mfrow){

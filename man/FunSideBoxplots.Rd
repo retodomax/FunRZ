@@ -4,9 +4,17 @@
 \alias{FunSideBoxplots}
 \title{Side Boxplots}
 \usage{
-FunSideBoxplots(x = rnorm(10, 10, 2), y = rnorm(10, 12, 2),
-  separator = NULL, col = "white", x_start = 0.55, y_start = 0.65,
-  main = "", ylim = NULL, xlim = NULL)
+FunSideBoxplots(
+  x = rnorm(10, 10, 2),
+  y = rnorm(10, 12, 2),
+  separator = NULL,
+  col = "white",
+  x_start = 0.55,
+  y_start = 0.65,
+  main = "",
+  ylim = NULL,
+  xlim = NULL
+)
 }
 \arguments{
 \item{x}{variable on x axis}

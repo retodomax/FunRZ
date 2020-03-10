@@ -4,16 +4,44 @@
 \alias{FunAxis}
 \title{Axis Function}
 \usage{
-FunAxis(xtitle = "x axis", ytitle = "y axis", xline = 2, yline = 2,
-  xpadj = 0, ypadj = 0, xcextitle = par("cex"),
-  ycextitle = par("cex"), xcexlab = par("cex"), ycexlab = par("cex"),
-  xat = NULL, yat = NULL, xlabels = TRUE, ylabels = TRUE,
-  xtick = TRUE, ytick = TRUE, xtick_lwd = 1.5, ytick_lwd = 1.5,
-  x_mtext = list(), y_mtext = list(), x_axis_1 = list(),
-  y_axis_1 = list(), x_axis_2 = list(), y_axis_2 = list(), xmt = T,
-  ymt = T, xmtn = 2, ymtn = 2, xmtratio = 0.5, ymtratio = 0.5,
-  xmtbothsides = T, ymtbothsides = T, xmt_args = list(),
-  ymt_args = list(), box_lwd = 1.5, box_args = list())
+FunAxis(
+  xtitle = "x axis",
+  ytitle = "y axis",
+  xline = 2,
+  yline = 2,
+  xpadj = 0,
+  ypadj = 0,
+  xcextitle = par("cex"),
+  ycextitle = par("cex"),
+  xcexlab = par("cex"),
+  ycexlab = par("cex"),
+  xat = NULL,
+  yat = NULL,
+  xlabels = TRUE,
+  ylabels = TRUE,
+  xtick = TRUE,
+  ytick = TRUE,
+  xtick_lwd = 1.5,
+  ytick_lwd = 1.5,
+  x_mtext = list(),
+  y_mtext = list(),
+  x_axis_1 = list(),
+  y_axis_1 = list(),
+  x_axis_2 = list(),
+  y_axis_2 = list(),
+  xmt = T,
+  ymt = T,
+  xmtn = 2,
+  ymtn = 2,
+  xmtratio = 0.5,
+  ymtratio = 0.5,
+  xmtbothsides = T,
+  ymtbothsides = T,
+  xmt_args = list(),
+  ymt_args = list(),
+  box_lwd = 1.5,
+  box_args = list()
+)
 }
 \arguments{
 \item{xtitle}{x axis title as string}
@@ -80,7 +108,7 @@ FunAxis()
 # Plot with arguments passed to FunAxis()
 plot(1:10, 1:10, ylim = c(-10,20), xlim = c(-5,15),
 axes = F, ann = F)
-FunAxis(xtitle = "year", ytitle = "temperature change [°C]")
+FunAxis(xtitle = "year", ytitle = "temperature change [Â°C]")
 FunAxis(xcextitle = 2, ycextitle = 2,
 xcexlab = 0.5, ycexlab = 0.5, xline = 3)
 FunAxis(box_lwd = 3, xtick_lwd = 3, ytick_lwd = 3,

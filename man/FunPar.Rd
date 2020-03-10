@@ -4,9 +4,17 @@
 \alias{FunPar}
 \title{Preferred par values funktion}
 \usage{
-FunPar(mar = c(3.5, 3.5, 2, 2), xaxs = "i", yaxs = "i", tcl = 0.4,
-  las = 1, mgp = c(2, 0.5, 0), lab = c(4, 4, 7), family = "Segoe",
-  cex = 0.9)
+FunPar(
+  mar = c(3.5, 3.5, 2, 2),
+  xaxs = "i",
+  yaxs = "i",
+  tcl = 0.4,
+  las = 1,
+  mgp = c(2, 0.5, 0),
+  lab = c(4, 4, 7),
+  family = "Segoe",
+  cex = 0.9
+)
 }
 \arguments{
 \item{mar}{smaller plot margin. default c(5.1, 4.1, 4.1, 2.1))}

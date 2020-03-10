@@ -4,8 +4,15 @@
 \alias{FunResplot}
 \title{Residual plot with resampling}
 \usage{
-FunResplot(obj, plots = 1:4, method = c("rnorm", "resampling"),
-  num = 100, set_seed = F, change_mfrow = T)
+FunResplot(
+  obj,
+  plots = 1:4,
+  method = c("rnorm", "resampling"),
+  num = 100,
+  set_seed = FALSE,
+  change_mfrow = TRUE,
+  plot_title = TRUE
+)
 }
 \arguments{
 \item{obj}{model (e.g. object of type \code{lm})}
@@ -24,6 +31,8 @@ resampling: residuals are drawn from observed residuals with replacment}
 
 \item{change_mfrow}{boolean. Automatically adjust \code{mfrow} if
 \code{length(plots) > 1}}
+
+\item{plot_title}{boolean. Should there be a title above the figure.}
 }
 \value{
 Nothing is returned. Plots are plotted

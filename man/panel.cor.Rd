@@ -4,8 +4,7 @@
 \alias{panel.cor}
 \title{plot correlation}
 \usage{
-panel.cor(x, y, digits = 2, prefix = "", cex.cor, text_pos = c(0.5,
-  0.5), ...)
+panel.cor(x, y, digits = 2, prefix = "", cex.cor, text_pos = c(0.5, 0.5), ...)
 }
 \arguments{
 \item{x, y}{Variables to calculate correlation}

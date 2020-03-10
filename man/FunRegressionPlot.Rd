@@ -4,9 +4,15 @@
 \alias{FunRegressionPlot}
 \title{Plot linear regression}
 \usage{
-FunRegressionPlot(x = rnorm(10, 10, 2), y = rnorm(10, 10, 2),
-  edge = c(0.1, 0.9), col = "black", regression_line = T,
-  x_log_transformed = F, y_log_transformed = F)
+FunRegressionPlot(
+  x = rnorm(10, 10, 2),
+  y = rnorm(10, 10, 2),
+  edge = c(0.1, 0.9),
+  col = "black",
+  regression_line = T,
+  x_log_transformed = F,
+  y_log_transformed = F
+)
 }
 \arguments{
 \item{x}{independent variable}
