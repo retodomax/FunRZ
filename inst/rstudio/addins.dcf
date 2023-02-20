@@ -1,0 +1,14 @@
+Name: Open corresponding html
+Description: Opens corresponding html file of an open Rmd file in Viewer pane without recompiling it
+Binding: open_corresponding_html
+Interactive: false
+
+Name: Restart R session
+Description: Restarts R session like the Ctrl+Shift+F10 shortcut but additionally clears console and moves focus to source editor
+Binding: restart_r_session
+Interactive: false
+
+Name: Add subsection
+Description: Inserts section like the Ctrl+Shift+R command but adds two `##` in front and less `-` after
+Binding: add_subsection
+Interactive: true
