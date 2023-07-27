@@ -20,7 +20,7 @@ add_subsection <- function() {
     # insert the input text as subsection
     observeEvent(input$done, {
       subsectionText <- paste0(stringr::str_pad(paste0("## ", input$subsection_text, " "),
-                                         45, "right", pad = "#"), "\n\n")
+                                         45, "right", pad = "#"), "\n")
       rstudioapi::insertText(subsectionText)
       stopApp()
     })

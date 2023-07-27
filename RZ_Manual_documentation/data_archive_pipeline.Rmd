@@ -1,0 +1,205 @@
+---
+project: FunRZ    ######################################################
+title:   Data Archive Pipeline
+author:  "[Reto Zihlmann](https://retodomax.github.io/)"
+date:    "`r Sys.Date()`"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    includes:
+      before_body: C:/Users/858782/texmf/tex/latex/commonstuff/RetoMathjax.tex
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(comment = "##",
+                      tidy = FALSE,
+                      fig.align = "center",
+                      out.width = "80%",
+                      fig.width = 7,
+                      fig.height = 5,
+                      echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      error = FALSE)
+```
+
+```{r, package-bib, include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown', "mgcv"
+), 'bib_packages.bib')
+```
+
+
+<!-- CSS Stype for Figure caption -->
+<!-- CSS Style for more space between headers -->
+<style>
+caption {
+  color: gray;
+  font-size: 0.8em;
+}
+p.caption {
+  color: gray;
+  font-size: 0.8em;
+  padding-bottom: 30px;
+}
+h1, .h1 {
+  margin-top: 84px;
+}
+h2, .h2, h3, .h3 {
+  margin-top: 42px;
+}
+</style>
+
+
+
+
+# Overall {-}
+
+```{r, echo=FALSE, out.width = '100%'}
+DiagrammeR::mermaid('
+flowchart TD
+l([l: input list]) --update--> l
+l --> column_rename_fun["column_rename_fun()"]
+l --> create_rename_table["create_rename_table()"]
+create_rename_table --> column_headers.xlsx
+column_headers.xlsx --previous version--> create_rename_table
+column_headers.xlsx --fill by hand--> column_header_filled.xlsx
+column_header_filled.xlsx --> column_rename_fun
+convention_table([convention_table]) --> column_rename_fun
+column_rename_fun --> l_renamed
+l_renamed --> l_final
+l_final --> data_archive_RDS[(data_archive_XXX.RDS)]
+l_final --> create_excel_archive["create_excel_archive()"]
+column_header_filled.xlsx --> create_excel_archive
+convention_table --> create_excel_archive
+create_excel_archive --> data_archive_excel[(data_archive_XXX.xlsx)]
+data_archive_excel --previous version --> create_excel_archive
+data_archive_excel --fill by hand--> data_archive_excel
+
+classDef myfun fill:#f9f
+class column_rename_fun myfun
+class create_rename_table myfun
+class create_excel_archive myfun
+
+linkStyle 0 stroke:green,stroke-width:4px,color:green;
+linkStyle 4 stroke:green,stroke-width:4px,color:green;
+linkStyle 15 stroke:green,stroke-width:4px,color:green;
+linkStyle 16 stroke:green,stroke-width:4px,color:green;
+', height = 1000)
+```
+
+
+
+
+# `create_rename_table()` {-}
+
+```{r, echo=FALSE, out.width = '100%'}
+DiagrammeR::mermaid('
+flowchart TD
+l([l: input list]) --> column_headers
+subgraph create_rename_table
+column_headers --> file.exists{"file.exists()"}
+file.exists --No--> wchs["write_column_headers_sheet()"]
+file.exists --Yes--> opened{"opended?"}
+opened --No--> archive_necessary{"table & orig_name
+combo disappeard?"}
+opened --Yes--> error([Error])
+archive_necessary --No--> update_column_headers[update column_headers]
+update_column_headers --> wchs
+archive_necessary --Yes--> save_archive[save archive]
+save_archive --> update_column_headers
+wchs --> saveWorkbook["saveWorkbook()"]
+end
+saveWorkbook --> column_headers2(["column_headers.xlsx"])
+
+style wchs fill:#f96
+', height = 1200)
+```
+
+
+```{r, echo=FALSE, out.width = '100%'}
+DiagrammeR::mermaid('
+flowchart TD
+column_headers([column_headers])
+column_headers --> create_wb["create workbook"]
+subgraph wchs["write_column_headers_sheet()"]
+create_wb --> style1["Style column `table` & `data_type`"]
+style1 --> for_readme_table{for_readme_table}
+for_readme_table --No--> column_width[Set column width]
+for_readme_table --Yes--> style2["Style column `has_convention`, `current_data_type` & `keep`"]
+style2 --> column_width
+end
+column_width --return--> workbook([workbook])
+
+classDef red fill:#f96
+class wchs red
+', height = 800)
+```
+
+
+
+
+# `column_rename_fun()` {-}
+
+```{r, echo=FALSE, out.width = '100%'}
+DiagrammeR::mermaid('
+flowchart TD
+
+l([l: input list]) --> src[select, rename, change data type]
+column_headers([column_headers]) --> column_headers2["column_headers"]
+convention_table([convention_table]) --patch--> column_headers2
+column_headers2 --> src
+l --> checks{"checks
+* individual (data type, col, row)
+* combined"}
+column_headers --> checks
+convention_table --> checks
+checks --Issue--> Error([Error])
+src --> sfl[set factor levels]
+sfl --> l2([l])
+', height = 800)
+```
+
+
+
+
+# `create_excel_archive()` {-}
+
+```{r, echo=FALSE, out.width = '100%'}
+DiagrammeR::mermaid('
+flowchart TD
+
+l([l: input list]) --> checks{"checks
+* individual (data type, col, row)
+* combined"}
+column_headers --> checks
+convention_table --> checks
+
+l --> readme
+convention_table --> patch_consistent
+column_headers --patch--> readme2
+
+subgraph check and join
+checks --> Error
+readme --> consitent_var_def{"inconsistent variable
+definition within dataset"}
+consitent_var_def --Yes--> patch_consistent{"patch consistent?"}
+consitent_var_def --No--> Error1([Error])
+patch_consistent --Yes--> readme2[readme]
+patch_consistent --No--> Error2([Error])
+end
+
+subgraph write excel
+readme2 --> wchs["write_column_headers_sheet()"]
+wchs --> write_ERD[write ERD]
+write_ERD --> write_data[write data]
+write_data --> save_xlsx[save xlsx]
+end
+
+save_xlsx --> data_archive_excel[(data_archive_XXX.xlsx)]
+
+style wchs fill:#f96
+', height = 800)
+```

@@ -12,3 +12,8 @@ Name: Add subsection
 Description: Inserts section like the Ctrl+Shift+R command but adds two `##` in front and less `-` after
 Binding: add_subsection
 Interactive: true
+
+Name: Add section
+Description: Inserts section like the Ctrl+Shift+R command but also works in RMarkdown/Quarto code chunks
+Binding: add_section
+Interactive: true

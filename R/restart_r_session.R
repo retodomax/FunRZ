@@ -19,3 +19,9 @@ restart_r_session <- function(){
 # invisible(capture.output(...))
 ## makes sure that executeComman() does not return NULL
 ## https://stackoverflow.com/a/34208658/6152316
+
+
+# ONLY ONE PROBLEM LEFT: rstudioapi::restartSession() does not work as expected at the moment :(
+# Keep track of these two issues
+# - https://github.com/rstudio/rstudio/issues/2841
+# - https://github.com/rstudio/rstudioapi/issues/111

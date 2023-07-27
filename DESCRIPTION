@@ -1,16 +1,26 @@
-Package: FunRZ
 Type: Package
+Package: FunRZ
 Title: Useful functions
 Version: 0.1.0
 Author: Reto Zihlmann
 Maintainer: Reto Zihlmann <retozihlmann@outlook.com>
-Description: This package provides a wild collection of functions
-    for data processing and visualization.
+Description: This package provides a wild collection of functions for data
+    processing and visualization.
 License: MIT
+Imports:
+    lubridate (>= 1.9.2),
+    forcats (>= 1.0.0),
+    stringr (>= 1.5.0),
+    dplyr (>= 1.1.1),
+    purrr (>= 1.0.1),
+    readr (>= 2.1.4),
+    tidyr (>= 1.3.0),
+    tibble (>= 3.2.1),
+    ggplot2 (>= 3.4.2),
+    shiny (>= 0.13),
+    miniUI (>= 0.1.1),
+    rstudioapi (>= 0.5),
+    readxl (>= 1.4)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
-Imports:
-  shiny (>= 0.13),
-  miniUI (>= 0.1.1),
-  rstudioapi (>= 0.5)
+RoxygenNote: 7.2.3
