@@ -5,9 +5,9 @@
 #' @export
 open_corresponding_html <- function() {
   file_path <- rstudioapi::getActiveDocumentContext()$path # extract current file path
-  html_path <- gsub(".Rmd$", ".html", file_path) # replace Rmd with html
+  html_path <- gsub(pattern = "(.Rmd$|.qmd$)", replacement = ".html", x = file_path, ignore.case = TRUE) # replace Rmd with html
   if(!file.exists(html_path)){stop("No html of same name found in same directory")}
-  file.copy(html_path, file.path(tempdir(), "test.html")) # copy to temp folder
+  file.copy(html_path, file.path(tempdir(), "test.html"), overwrite = TRUE) # copy to temp folder
   myViewer <- getOption("viewer") # extract Viewer function
   myViewer(file.path(tempdir(), "test.html")) # open temp file in Viewer
 }

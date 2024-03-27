@@ -20,29 +20,29 @@ read_excel_tmp(
 )
 }
 \arguments{
-\item{path}{see [readxl::read_excel()]}
+\item{path}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{sheet}{see [readxl::read_excel()]}
+\item{sheet}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{range}{see [readxl::read_excel()]}
+\item{range}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{col_names}{see [readxl::read_excel()]}
+\item{col_names}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{col_types}{see [readxl::read_excel()]}
+\item{col_types}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{na}{see [readxl::read_excel()]}
+\item{na}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{trim_ws}{see [readxl::read_excel()]}
+\item{trim_ws}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{skip}{see [readxl::read_excel()]}
+\item{skip}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{n_max}{see [readxl::read_excel()]}
+\item{n_max}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{guess_max}{see [readxl::read_excel()]}
+\item{guess_max}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{progress}{see [readxl::read_excel()]}
+\item{progress}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 
-\item{.name_repair}{see [readxl::read_excel()]}
+\item{.name_repair}{see \code{\link[readxl:read_excel]{readxl::read_excel()}}}
 }
 \value{
 A tibble

@@ -37,7 +37,7 @@ written.}
 \item{border.bg}{color(s) for rectangle border(s). The default \code{NA}
 omits borders.}
 
-\item{adj}{one or two values in [0, 1] which specify the x (and optionally
+\item{adj}{one or two values in \link{0, 1} which specify the x (and optionally
 y) adjustment of the labels.}
 
 \item{pos}{a position specifier for the text. If specified this overrides

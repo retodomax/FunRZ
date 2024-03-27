@@ -1,13 +1,3 @@
-#' ---
-#' project: FunRZ    ######################################################
-#' title:   create_rename_table
-#' author:  Reto Zihlmann <retozihlmann@outlook.com>
-#' date:    2023-06-19 14:24:22
-#' output:  github_document   #############################################
-#' ---
-
-
-
 
 #' Paste error message components together with glue
 abort_glue <- function(...){rlang::abort(glue::glue(...))}
@@ -138,7 +128,7 @@ write_column_headers_sheet <- function(column_headers, tabname = "column_headers
     style_logical(wb, sheet = 1, cols = which(colnm == "keep"),
                   rows = 2:(nrow(column_headers)+1))
 
-    ## conditional colour or row if
+    ## conditional colour of row if
     ## 1) second appearance of variable
     ## 2) has_convention == TRUE
     ## 3) keep == FALSE

@@ -14,7 +14,7 @@ asterisk
 }
 \description{
 Takes any vector of p values and returnes the vector in asterisk notation
-with p<0.05 (*), <0.01 (**), and <0.001 (***)
+with p<0.05 (\emph{), <0.01 (\strong{), and <0.001 (}})
 }
 \examples{
 FunSigStar(0.01)

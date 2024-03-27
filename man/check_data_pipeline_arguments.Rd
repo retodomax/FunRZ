@@ -18,7 +18,7 @@ check_data_pipeline_arguments(
 
 \item{column_headers}{tibble with column header descriptions}
 
-\item{check_l_ch_consistency}{[\code{logical(1)}] \cr If consistency between l and column_headers should be checked}
+\item{check_l_ch_consistency}{\link{\code{logical(1)}} \cr If consistency between l and column_headers should be checked}
 }
 \description{
 Check arguments of the data pipeline: l, convention_table and column_headers

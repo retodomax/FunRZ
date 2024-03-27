@@ -2,24 +2,10 @@
 % Please edit documentation in R/create_rename_table.R
 \name{abort_glue}
 \alias{abort_glue}
-\title{---
-project: FunRZ    ######################################################
-title:   create_rename_table
-author:  Reto Zihlmann <retozihlmann@outlook.com>
-date:    2023-06-19 14:24:22
-output:  github_document   #############################################
----
-Paste error message components together with glue}
+\title{Paste error message components together with glue}
 \usage{
 abort_glue(...)
 }
 \description{
----
-project: FunRZ    ######################################################
-title:   create_rename_table
-author:  Reto Zihlmann <retozihlmann@outlook.com>
-date:    2023-06-19 14:24:22
-output:  github_document   #############################################
----
 Paste error message components together with glue
 }

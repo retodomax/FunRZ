@@ -39,7 +39,7 @@ sideboxplots
 }
 \description{
 Takes any vector of p values and returnes the vector in asterisk notation
-with p<0.05 (*), <0.01 (**), and <0.001 (***)
+with p<0.05 (\emph{), <0.01 (\strong{), and <0.001 (}})
 }
 \examples{
 df <- data.frame(x = c(rnorm(80, 10,2), rnorm(20, 7, 2)),

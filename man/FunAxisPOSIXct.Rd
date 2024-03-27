@@ -95,7 +95,7 @@ e.g. which, lty, ...}
 
 \item{xtimevec}{vector with all date-times to produce the plot (x argument of the plot function)}
 
-\item{format}{character vector specifying the way to print the date-time e.g. "\%m.\%y". See strptime.}
+\item{format}{character vector specifying the way to print the date-time e.g. "\\%m.\\%y". See strptime.}
 
 \item{y...}{each argument for the y axis}
 }

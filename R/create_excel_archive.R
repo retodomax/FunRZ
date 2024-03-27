@@ -175,12 +175,18 @@ create_excel_archive <- function(l, filename = "data_archive",
 
     DiagrammeR::mermaid(erd_out, height = erd_height) %>%
       htmltools::html_print(viewer = NULL) %>%
-      webshot2::webshot(file = destfile, zoom = 2, vwidth = 992, vheight = 992*2)
-    ## currently not possible to suppress webshot message "screenshot completed"
-    ## See here for updates: https://github.com/rstudio/webshot2/issues/24
-    # mer <- DiagrammeR::mermaid(erd_out)
-    # p <- htmltools::html_print(mer, viewer = NULL)
-    # webshot2::webshot(p, file = destfile, zoom = 2)
+      gsub("\\\\", "/", .) %>%
+      webshot2::webshot(file = destfile, zoom = 2,
+                        selector = c("rect", "path", "g"),
+                        expand = 15, quiet = TRUE)
+    ## `zoom` will make resolution better
+    ## `selector` which css selectors define the area of interest (to include in the webshot)
+    ## `expand` adds margin arround image
+    ## `quiet` makes sure that there is no message printed
+
+    ## If there are issues with DiagrammR after a new version of R, make sure to
+    ## attach a newer version mermaid to DiagrammR:
+    ## https://github.com/rich-iannone/DiagrammeR/issues/457#issuecomment-1109995343
 
     openxlsx::addWorksheet(wb = wb, sheetName = "ERD", tabColour = "lightgray")
     ## defalut dimensions of DiagrammeR::mermaid() is
@@ -212,9 +218,29 @@ create_excel_archive <- function(l, filename = "data_archive",
 }
 
 ## To Do:
+# * Allow to manually edit archive.xlsx file (README part) and paste changes later to newer version!!
+#    - VERY IMPORTANT feature
+# * Allow to provide several column_header files to create_excel_archive()
+#    - e.g. in Reading (calf, beef) we had two column_headers tables (README part)
+#      but only one can be provided...
+#      Second part: (would be nice it AT LEAST
+#      some of the descriptions can be manually filled and are not lost
+#      each time the archive is newly generated...)
+#       => this is the first bullet point in ToDo
+# * Variables which are of type "Date" have in Excel a custom number format which is (yyyy-mm-dd hh:mm:ss)
+#   However for dates this would be better to be yyyy-mm-dd
+#   Strangely this is not automatically done (even if there is line 145: `options("openxlsx.dateFormat" = "yyyy-mm-dd")`)
+# * Check if it is possible to set "Confidential" label automatically (e.g. check XML source of excel set to "Confidencial")
 # * Make better documentation
 # * Make tests (based on R_stat_varia::test_data_pipeline.R
-# * Allow to manually edit archive.xlsx file and paste changes later to newer version
 # * Add CDISC variable names to convention_names (based on Sudhars document)
 # * Function which allows to read from excel_archive.xlsx
+# * Make it possible to return ERD markup code (maybe separate function, which is called within `create_excel_archive`?)
+# * Make it possible to return ERD as png
+# * Maybe: Ways to improve the ordering of tables in ERD
+#    - E.g. take Reading Calf/Beef
+#    - It would be nice if the two gas tables are next to each other
+#    - this can be achieved by reordering `erd_dat` such that the tables do not
+#    - occure in alphabetical order...
+#    - Easiest to find out if you extract the ERD code
 # * Add Code for dbdiagram.io

@@ -7,5 +7,5 @@
 add_subsection()
 }
 \description{
-Like the Ctrl+Shift+R command but adds two `##` in front and less `-` after
+Like the Ctrl+Shift+R command but adds two \verb{##} in front and less \code{-} after
 }

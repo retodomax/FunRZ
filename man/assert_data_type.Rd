@@ -9,7 +9,7 @@ assert_data_type(x, any.missing = TRUE)
 \arguments{
 \item{x}{character vector to check}
 
-\item{any.missing}{[\code{logical(1)}] \cr Are vectors with missing values allowed? Default is TRUE.}
+\item{any.missing}{\link{\code{logical(1)}} \cr Are vectors with missing values allowed? Default is TRUE.}
 }
 \description{
 data_type is a special column in the data archive pipeline. This function
