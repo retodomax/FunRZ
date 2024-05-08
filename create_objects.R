@@ -82,7 +82,7 @@ dsm_col <- dsm_col %>%
   ungroup() %>%
   mutate(color = fct_inorder(rep(c("green", "blue", "purple", "red", "orange", "yellow", "brown"), each = 5)),
          hue = rep(1:5, 7))
-# with(dsm_col, plot(x = as.numeric(factor(color)), y = hue, col = hex, cex = 5, pch = 16))
+# with(FunRZ::dsm_col, plot(x = as.numeric(factor(color)), y = hue, col = hex, cex = 5, pch = 16))
 
 
 # Save objects ------------------------------------------------------------

@@ -26,28 +26,6 @@ assert_data_type <- function(x, any.missing = TRUE){
 
 
 
-## adding styles is done separately, because the style should only be
-## added once (otherwise we get a warning),
-## wherease the `style_logical()` function can potentially be
-## applied multiple times within one workbook
-add_styles <- function(wb){
-  wb <- wb %>%
-    openxlsx2::wb_add_dxfs_style(name = "negStyle",
-                                 font_color = openxlsx2::wb_color(hex = "#9C0006"),
-                                 bg_fill = openxlsx2::wb_color(hex = "#FFC7CE")) %>%
-    openxlsx2::wb_add_dxfs_style(name = "posStyle",
-                                 font_color = openxlsx2::wb_color(hex = "#006100"),
-                                 bg_fill = openxlsx2::wb_color(hex = "#C6EFCE"))
-  for(i in seq_along(data_type_formats$col)){
-    dat_type_i <- data_type_formats$data_type[i]
-    style_name_i <- paste0("data_type_", dat_type_i)
-    wb <- wb %>%
-      openxlsx2::wb_add_dxfs_style(name = style_name_i,
-                                   bg_fill = openxlsx2::wb_color(hex = data_type_formats$col[i]))
-  }
-  wb
-}
-
 
 #' Style Excel Cells TRUE/FALSE
 #'
@@ -57,15 +35,15 @@ add_styles <- function(wb){
 #' @param rows Rows to apply conditional formatting to
 #' @export
 style_logical <- function(wb, sheet, cols, rows){
-  mycol <- openxlsx2::int2col(cols[1])  ## TODO: like this it seems not possible to add multiple columns!!!
-  dims_dat <- openxlsx2::wb_dims(rows = rows, cols = cols)
-  wb %>%
-    openxlsx2::wb_add_conditional_formatting(sheet = sheet, dims = dims_dat,
-                                             rule = paste0(mycol, rows[1], '==FALSE'),
-                                             style = "negStyle") %>%
-    openxlsx2::wb_add_conditional_formatting(sheet = sheet, dims = dims_dat,
-                                             rule = paste0(mycol, rows[1], '==TRUE'),
-                                             style = "posStyle")
+  mycol <- openxlsx::int2col(cols[1])
+  negStyle <- openxlsx::createStyle(fontColour = "#9C0006", bgFill = "#FFC7CE")
+  posStyle <- openxlsx::createStyle(fontColour = "#006100", bgFill = "#C6EFCE")
+  openxlsx::conditionalFormatting(wb = wb, sheet = sheet, cols = cols, rows = rows,
+                                  rule = paste0(mycol, rows[1], '==FALSE'),
+                                  style = negStyle)
+  openxlsx::conditionalFormatting(wb = wb, sheet = sheet, cols = cols, rows = rows,
+                                  rule = paste0(mycol, rows[1], '==TRUE'),
+                                  style = posStyle)
 }
 
 
@@ -78,18 +56,21 @@ style_logical <- function(wb, sheet, cols, rows){
 #' @param rows Rows to apply conditional formatting to
 #' @export
 style_data_type <- function(wb, sheet, cols, rows){
-  mycol <- openxlsx2::int2col(cols[1]) ## TODO: like this it seems not possible to add multiple columns!!!
-  dims_dat <- openxlsx2::wb_dims(rows = rows, cols = cols)
-  for(i in seq_along(data_type_formats$col)){
-    dat_type_i <- data_type_formats$data_type[i]
-    style_name_i <- paste0("data_type_", dat_type_i)
-    wb <- wb %>%
-      openxlsx2::wb_add_conditional_formatting(sheet = 1, dims = dims_dat,
-                                               rule = paste0(mycol, rows[1], '=="', dat_type_i,'"'),
-                                               style = style_name_i)
+  mycol <- openxlsx::int2col(cols[1])
+
+  data_type_style <- data_type_formats %>%
+    rowwise() %>%
+    mutate(style = list(openxlsx::createStyle(bgFill = col)))
+  format_function <- function(data_type, style){
+    openxlsx::conditionalFormatting(wb = wb, sheet = sheet, cols = cols, rows = rows,
+                                    rule = paste0(mycol, rows[1], '=="', data_type,'"'),
+                                    style = style)
   }
-  wb
+  map2(.x = data_type_style$data_type, .y = data_type_style$style,
+       .f = format_function)
+  invisible()
 }
+
 
 
 
@@ -102,19 +83,16 @@ style_data_type <- function(wb, sheet, cols, rows){
 #' @export
 write_column_headers_sheet <- function(column_headers, tabname = "column_headers",
                                        for_rename_table = FALSE) {
-  oopt <- options(openxlsx2.na.strings = "")
-  on.exit(options(oopt))
   colnm <- colnames(column_headers)
 
   ## Write to excel
-  options("openxlsx2.datetimeFormat" = "yyyy-mm-dd hh:mm:ss")
-  options("openxlsx2.dateFormat" = "yyyy-mm-dd")
-  wb <- openxlsx2::wb_workbook(creator = "Reto Zihlmann") %>%
-    openxlsx2::wb_set_base_font(font_name = "Calibri") %>%
-    openxlsx2::wb_add_worksheet(sheet = tabname, tab_color = "lightgray") %>%
-    openxlsx2::wb_add_data(sheet = 1, x = column_headers) %>%
-    wb_format_header(sheet = 1, dat = column_headers) %>%
-    wb_add_sensitivity()
+  options("openxlsx.datetimeFormat" = "yyyy-mm-dd hh:mm:ss")
+  options("openxlsx.dateFormat" = "yyyy-mm-dd")
+  wb <- openxlsx::createWorkbook(creator = "Reto Zihlmann")
+  openxlsx::addWorksheet(wb, tabname, tabColour = "lightgray")
+  headerStyle <- openxlsx::createStyle(fgFill = "#D9E1F2", borderStyle = "thin",
+                                       border = c("top", "bottom", "left", "right"))
+  openxlsx::writeData(wb, 1, column_headers, headerStyle = headerStyle)
 
   ## Table Styling
   ### column: table
@@ -125,31 +103,26 @@ write_column_headers_sheet <- function(column_headers, tabname = "column_headers
                     col = rep(table_col, length.out = length(levels(my_tables))),
                     from = c(1, row_nr[-length(row_nr)]+1) + 1,
                     to = row_nr + 1)
+
   for(i in seq_along(row_col$col)){
-    dims_dat <- openxlsx2::wb_dims(rows = row_col$from[i]:row_col$to[i],
-                                   cols = which(colnm == "table"))
-    wb <- wb %>%
-      openxlsx2::wb_add_fill(sheet = 1,
-                             dims = dims_dat,
-                             color = openxlsx2::wb_color(row_col$col[i]))
+    sty <- openxlsx::createStyle(fgFill = row_col$col[i])
+    openxlsx::addStyle(wb = wb, sheet = 1, style = sty,
+                       rows = row_col$from[i]:row_col$to[i],
+                       cols = which(colnm == "table"))
   }
 
-  ## add styles
-  wb <- wb %>% add_styles()
-
   ### column: data_type
-  wb <- wb %>%
-    style_data_type(sheet = 1, cols = which(colnm == "data_type"),
-                    rows = 2:(nrow(column_headers)+1))
+  style_data_type(wb, sheet = 1, cols = which(colnm == "data_type"),
+                  rows = 2:(nrow(column_headers)+1))
 
   ### Some stylings are only necessary if it is for rename_table
   ### (which contains `has_convention`, `keep`, ...)
   if(for_rename_table){
     ### column: has_convention
-    wb <- style_logical(wb, sheet = 1, cols = which(colnm == "has_convention"),
+    style_logical(wb, sheet = 1, cols = which(colnm == "has_convention"),
                   rows = 2:(nrow(column_headers)+1))
     ### column: current_data_type
-    wb <- style_data_type(wb, sheet = 1, cols = which(colnm == "current_data_type"),
+    style_data_type(wb, sheet = 1, cols = which(colnm == "current_data_type"),
                     rows = 2:(nrow(column_headers)+1))
     ### column: keep
     style_logical(wb, sheet = 1, cols = which(colnm == "keep"),
@@ -159,43 +132,39 @@ write_column_headers_sheet <- function(column_headers, tabname = "column_headers
     ## 1) second appearance of variable
     ## 2) has_convention == TRUE
     ## 3) keep == FALSE
-    colrange1 <- which(colnm == "data_type"):which(colnm == "additional_description")
-    colrange2 <- which(colnm == "data_type"):which(colnm == "axis_legend")
-    colrange3 <- which(colnm == "variable"):which(colnm == "factor_levels")
-    dim1 <- openxlsx2::wb_dims(rows = 3:(nrow(column_headers)+1), cols = colrange1)
-    dim2 <- openxlsx2::wb_dims(rows = 2:(nrow(column_headers)+1), cols = colrange2)
-    dim3 <- openxlsx2::wb_dims(rows = 2:(nrow(column_headers)+1), cols = colrange3)
-    wb <- wb %>%
-      openxlsx2::wb_add_dxfs_style(name = "style_second_appearence",
-                                   bg_fill = openxlsx2::wb_color(hex = "#948A54")) %>%
-      openxlsx2::wb_add_dxfs_style(name = "style_has_convention",
-                                   bg_fill = openxlsx2::wb_color(hex = "#494529")) %>%
-      openxlsx2::wb_add_dxfs_style(name = "style_keep_false",
-                                   bg_fill = openxlsx2::wb_color(hex = "#404040")) %>%
-      openxlsx2::wb_add_conditional_formatting(sheet = tabname, dims = dim1,
-                                               rule = 'ISNUMBER(MATCH($E3, $E$2:$E2, 0))',
-                                               ## Value in Column E needs to have a match
-                                               ## in the values above
-                                               style = "style_second_appearence") %>%
-      openxlsx2::wb_add_conditional_formatting(sheet = tabname, dims = dim2,
-                                               rule = '$F2=TRUE',
-                                               ## Value in Column E needs to have a match
-                                               ## in the values above
-                                               style = "style_has_convention") %>%
-      openxlsx2::wb_add_conditional_formatting(sheet = tabname, dims = dim3,
-                                               rule = 'AND($D2=FALSE, NOT(ISBLANK($D2)))',
-                                               ## Value in Column E needs to have a match
-                                               ## in the values above
-                                               style = "style_keep_false")
+    style_second_appearence <- openxlsx::createStyle(bgFill = "#948A54")
+    style_has_convention <- openxlsx::createStyle(bgFill = "#494529")
+    style_keep_false <- openxlsx::createStyle(bgFill = "#404040")
+    colrange <- which(colnm == "data_type"):which(colnm == "additional_description")
+    openxlsx::conditionalFormatting(wb, tabname,
+                                    cols = colrange,
+                                    rows=3:(nrow(column_headers)+1),
+                                    rule='ISNUMBER(MATCH($E3, $E$2:$E2, 0))',
+                                    ## Value in Column E needs to have a match
+                                    ## in the values above
+                                    style = style_second_appearence)
+    colrange <- which(colnm == "data_type"):which(colnm == "axis_legend")
+    openxlsx::conditionalFormatting(wb, tabname,
+                                    cols = colrange,
+                                    rows=2:(nrow(column_headers)+1),
+                                    rule='$F2=TRUE',
+                                    style = style_has_convention)
+    colrange <- which(colnm == "variable"):which(colnm == "factor_levels")
+    openxlsx::conditionalFormatting(wb, tabname,
+                                    cols = colrange,
+                                    rows=2:(nrow(column_headers)+1),
+                                    rule='AND($D2=FALSE, NOT(ISBLANK($D2)))',
+                                    ## Column D has to be FALSE but NOT empty
+                                    style = style_keep_false)
   }
 
   ## Freeze top row and set column width
-  wb <- wb %>%
-    openxlsx2::wb_set_col_widths(sheet = 1, cols = 1:ncol(column_headers), widths = "auto") %>%
-    openxlsx2::wb_set_col_widths(sheet = 1, cols = which(colnm == "variable"), widths = 20) %>%
-    openxlsx2::wb_set_col_widths(sheet = 1, cols = which(colnm == "factor_levels"), widths = 30) %>%
-    openxlsx2::wb_set_col_widths(sheet = 1, cols = which(colnm == "description"), widths = 50) %>%
-    openxlsx2::wb_set_col_widths(sheet = 1, cols = which(colnm == "axis_legend"), widths = 30)
+  openxlsx::freezePane(wb, sheet = 1, firstRow = TRUE)
+  openxlsx::setColWidths(wb, sheet = 1, cols = 1:ncol(column_headers), widths = "auto")
+  openxlsx::setColWidths(wb, sheet = 1, cols = which(colnm == "variable"), widths = 20)
+  openxlsx::setColWidths(wb, sheet = 1, cols = which(colnm == "factor_levels"), widths = 30)
+  openxlsx::setColWidths(wb, sheet = 1, cols = which(colnm == "description"), widths = 50)
+  openxlsx::setColWidths(wb, sheet = 1, cols = which(colnm == "axis_legend"), widths = 30)
 
   ## Return
   wb
@@ -282,5 +251,5 @@ create_rename_table <- function(l, file = "column_headers.xlsx", overwrite = FAL
                                    for_rename_table = TRUE)
 
   ## Save
-  openxlsx2::wb_save(wb = wb, file = file, overwrite = TRUE)
+  openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 }

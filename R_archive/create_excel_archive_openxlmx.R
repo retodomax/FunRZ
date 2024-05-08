@@ -141,8 +141,8 @@ create_excel_archive <- function(l, filename = "data_archive",
   }
 
   ## Write Excel ##############################
-  options("openxlsx2.datetimeFormat" = "yyyy-mm-dd hh:mm:ss")
-  options("openxlsx2.dateFormat" = "yyyy-mm-dd")
+  options("openxlsx.datetimeFormat" = "yyyy-mm-dd hh:mm:ss")
+  options("openxlsx.dateFormat" = "yyyy-mm-dd")
 
   ## README tab
   wb <- write_column_headers_sheet(column_headers = readme, tabname = "README")
@@ -188,21 +188,13 @@ create_excel_archive <- function(l, filename = "data_archive",
     ## attach a newer version mermaid to DiagrammR:
     ## https://github.com/rich-iannone/DiagrammeR/issues/457#issuecomment-1109995343
 
-    ## calculate image height, (such that aspect ratio stays correct)
-    img <- png::readPNG(destfile)
-    img_dim <- dim(img) # height, width, colorchannels
-    ## end width should be 15 inches
-    scale_hight_by <- img_dim[2]/15
-    height <- img_dim[1]/scale_hight_by
-
-    wb <- wb %>%
-      openxlsx2::wb_add_worksheet(sheet = "ERD", tab_color = "lightgray") %>%
-      ## defalut dimensions of DiagrammeR::mermaid() is
-      ##  - 975 x 516
-      ##  - 1950 x 1032                   (with zoom = 2)
-      ##  - 1950 x (erd_height + 16)*2    (with manually setting height)
-      openxlsx2::wb_add_image(sheet = "ERD", file = destfile,
-                              width = 15, height = height)
+    openxlsx::addWorksheet(wb = wb, sheetName = "ERD", tabColour = "lightgray")
+    ## defalut dimensions of DiagrammeR::mermaid() is
+    ##  - 975 x 516
+    ##  - 1950 x 1032                   (with zoom = 2)
+    ##  - 1950 x (erd_height + 16)*2    (with manually setting height)
+    openxlsx::insertImage(wb = wb, sheet = "ERD", file = destfile,
+                          width = 1950/130, height = (erd_height + 16)*2 /130)
   }
 
   ## All remaining tabs
@@ -210,26 +202,22 @@ create_excel_archive <- function(l, filename = "data_archive",
   tab_col <- rep(tab_col, length.out = length(l))
   for(i in seq_along(l)){
     sheet_nr <- i + 1 + as.numeric(ERD)
-    wb <- wb %>%
-      openxlsx2::wb_add_worksheet(sheet = names(l)[i], tab_color = tab_col[i]) %>%
-      openxlsx2::wb_add_data_table(sheet = sheet_nr, x = l[[i]],
-                                   table_style = "TableStyleLight1",
-                                   with_filter = FALSE) %>%
-      openxlsx2::wb_freeze_pane(sheet = sheet_nr, first_row = TRUE) %>%
-      openxlsx2::wb_set_col_widths(sheet = sheet_nr, cols = 1:lengths(l)[i], widths = "auto")
+    openxlsx::addWorksheet(wb = wb, sheetName = names(l)[i], tabColour = tab_col[i])
+    # openxlsx::writeData(wb, sheet_nr, l[[i]], headerStyle = headerStyle)
+    openxlsx::writeDataTable(wb = wb, sheet = sheet_nr, x = l[[i]],
+                             tableStyle = "TableStyleLight1", withFilter = FALSE)
+    openxlsx::freezePane(wb, sheet = sheet_nr, firstRow = TRUE)
+    openxlsx::setColWidths(wb, sheet = sheet_nr, cols = 1:lengths(l)[i], widths = "auto")
   }
 
   ## Save
   filename <- paste0(filename, "_",
                      format(Sys.time(), format = "%Y%m%d"), ".xlsx")
-  openxlsx2::wb_save(wb = wb, file = filename, overwrite = TRUE)
+  openxlsx::saveWorkbook(wb, file = filename, overwrite = TRUE)
   invisible(readme)
 }
 
 ## To Do:
-# * Make 2 README files
-#    - README_tables: Description of all tables/sheets in the Excel sheet
-#    - README_columns: Description of all the columns per sheet
 # * Allow to manually edit archive.xlsx file (README part) and paste changes later to newer version!!
 #    - VERY IMPORTANT feature
 # * Allow to provide several column_header files to create_excel_archive()
