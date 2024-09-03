@@ -32,16 +32,16 @@
 #' @param box_args list of arguments passed to box() to plot box arround plot.
 #' e.g. which, lty, ...
 #' @param xtimevec vector with all date-times to produce the plot (x argument of the plot function)
-#' @param format character vector specifying the way to print the date-time e.g. "\%m.\%y". See strptime.
+#' @param format character vector specifying the way to print the date-time e.g %m.%y. See strptime.
 #' @return axis, ticks, labels and axistitle
 #' @author Reto Zihlmann
 #' @seealso box, mtext, axis
-#' @examples library(lubridate)
-#' @examples x <- now() + days(0:7)
-#' @examples y <- rnorm(8)
-#'
-#' @examples plot(x,y, type = "l", axes = F, ann = F)
-#' @examples FunAxisPOSIXct(xtimevec = x, format = "%d.%m")
+#' @examples
+#' library(lubridate)
+#' x <- now() + days(0:7)
+#' y <- rnorm(8)
+#' plot(x,y, type = "l", axes = F, ann = F)
+#' FunAxisPOSIXct(xtimevec = x, format = "%d.%m")
 #' @export
 FunAxisPOSIXct <- function(xtitle = "x axis", ytitle = "y axis",
                     xline = 2, yline = 2, xpadj = 0, ypadj = 0,

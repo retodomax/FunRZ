@@ -26,6 +26,9 @@ write_xlsx(
 
 \item{...}{see \code{\link[openxlsx2:write_xlsx]{openxlsx2::write_xlsx()}}}
 }
+\value{
+the \code{wbWorkbook} object, invisibly
+}
 \description{
 Write a data frame or list of data frames to an xlsx file.
 }

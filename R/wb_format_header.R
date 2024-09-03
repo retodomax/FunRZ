@@ -4,7 +4,7 @@
 #' @param dat data which were included in Excel sheet, used to extract dimensions of header
 #' @param sheet A name or index of a worksheet
 #'
-#' @return
+#' @return A `wbWorkbook` object
 #' @export
 #'
 #' @examples wb_workbook(creator = "Reto Zihlmann") %>%

@@ -2,22 +2,22 @@
 % Please edit documentation in R/add_dots.R
 \name{add_dots}
 \alias{add_dots}
-\title{Add Dots (...) below kable Table}
+\title{Add Dots (...) below display Table}
 \usage{
-add_dots(kable_table)
+add_dots(input_table)
 }
 \arguments{
-\item{kable_table}{output from \code{kableExtra::kbl()}}
+\item{input_table}{output from \code{kableExtra::kbl()} or \code{gt::gt()} or \code{knitr::kable()}}
 }
 \value{
-Object of class kableExtra
+Object of class kableExtra or output is directly printed as html?
 }
 \description{
-Add Dots (...) below kable Table
+This function has become a bit too complex, maybe it's easier to just say 'we print the first few rows of the dataset'
 }
 \examples{
 iris \%>\%
  head() \%>\%
- kbl() \%>\%
+ kableExtra::kbl() \%>\%
  add_dots()
 }

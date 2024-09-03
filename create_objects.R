@@ -82,10 +82,40 @@ dsm_col <- dsm_col %>%
   ungroup() %>%
   mutate(color = fct_inorder(rep(c("green", "blue", "purple", "red", "orange", "yellow", "brown"), each = 5)),
          hue = rep(1:5, 7))
-# with(FunRZ::dsm_col, plot(x = as.numeric(factor(color)), y = hue, col = hex, cex = 5, pch = 16))
+# with(FunRZ::dsm_col, plot(x = as.numeric(factor(color)), y = hue, bg = hex,
+#                           cex = 9, pch = 22, xlim = c(0,8), ylim = c(0,6)))
+
+## RCol #####################################
+# RColOld <- c(darkMossGreen = "#606c38ff",
+#           pakistanGreen = "#283618ff",
+#           cornsilk = "#fefae0ff",
+#           earthYellow = "#dda15eff",
+#           tigersEye = "#bc6c25ff")
+
+RCol <- tibble::tibble(
+  hex = c("#edf0e3", "#cad3ab", "#a7b673", "#7c8c49", "#4b542c", "#191c0f",
+          "#f8eadc", "#e9c296", "#da9950", "#af6e25", "#694216", "#231607",
+          "#fdf6d6", "#fae485", "#f6d233", "#cca809", "#7a6505", "#292202",
+          "#f5e1df", "#e1a59e", "#cd695d", "#a23f32", "#61261e", "#200d0a",
+          "#e6e8ee", "#b4bacb", "#828ca8", "#57627d", "#343b4b", "#111419"),
+  color = fct_inorder(rep(c("green", "orange", "yellow", "red", "blue"), each = 6)),
+  hue = rep(1:6, 5)) %>%
+  rowwise() %>%
+  mutate(R = col2rgb(hex)[1],
+         G = col2rgb(hex)[2],
+         B = col2rgb(hex)[3]) %>%
+  ungroup() %>%
+  select(R, G, B, hex, color, hue)
+
+# with(RCol, plot(x = as.numeric(factor(color)), y = hue, bg = hex,
+#                 cex = 9, pch = 22, xlim = c(0,8), ylim = c(0,6)))
+# https://coolors.co/palette/606c38-283618-fefae0-dda15e-bc6c25
+# https://mdigi.tools/color-shades
+# https://leonardocolor.io/theme.html
 
 
 # Save objects ------------------------------------------------------------
 
 # save(data_type_formats, file="data/data_type_formats.RData")
 # save(dsm_col, file = "data/dsm_col.RData")
+# save(RCol, file = "data/RCol.RData")

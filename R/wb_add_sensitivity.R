@@ -3,7 +3,7 @@
 #' @param wb A `wbWorkbook` object
 #' @param sensitivity Sensitivity label, one of the following: "public", "internal" (default), "confidential", "secret"
 #'
-#' @return
+#' @return A `wbWorkbook` object
 #' @export
 #'
 #' @examples wb %>% wb_add_sensitivity(sensitivity = "secret")

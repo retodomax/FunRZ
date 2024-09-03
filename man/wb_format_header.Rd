@@ -13,6 +13,9 @@ wb_format_header(wb, sheet = openxlsx2::current_sheet(), dat)
 
 \item{dat}{data which were included in Excel sheet, used to extract dimensions of header}
 }
+\value{
+A \code{wbWorkbook} object
+}
 \description{
 Format Header of Excel Table
 }

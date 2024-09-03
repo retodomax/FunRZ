@@ -14,6 +14,9 @@ wb_add_sensitivity(
 
 \item{sensitivity}{Sensitivity label, one of the following: "public", "internal" (default), "confidential", "secret"}
 }
+\value{
+A \code{wbWorkbook} object
+}
 \description{
 Add Companty Sensitivity Label
 }

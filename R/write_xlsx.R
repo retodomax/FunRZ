@@ -9,7 +9,7 @@
 #' @param sensitivity  sensitivity Sensitivity label, one of the following: "public", "internal" (default), "confidential", "secret"
 #' @param ...  see [openxlsx2::write_xlsx()]
 #'
-#' @return
+#' @return the `wbWorkbook` object, invisibly
 #' @export
 #'
 #' @examples write_xlsx(x = list(iris = iris, mtcars = mtcars), file = "~/Downloads/test_to_delete_write.xlsx")
