@@ -1,3 +1,8 @@
+Name: Project Folder Structure
+Description: Create template folder structure for RStudio project
+Binding: proj_temp
+Interactive: false
+
 Name: Open corresponding html
 Description: Opens corresponding html file of an open Rmd file in Viewer pane without recompiling it
 Binding: open_corresponding_html
