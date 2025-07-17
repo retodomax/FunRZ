@@ -15,9 +15,22 @@ oldtheme <- theme_set(theme_bw())
 
 # Create objects ----------------------------------------------------------
 
+## NOTE:
+## Currently the objects are saved as data sets (i.e. in the `/data/` folder)
+## However, they are not really "data sets"
+## Probably it would make more sense to store them as simple objects (similar to functions)
+
+
+## UPDATE: 2025-07-17
+## Now objects are created in script `R/create_objects.R`
+## This script can be deleted
+
+
+
+
 
 ## Data Type Formats ########################
-data_type_formats <- tribble(
+data_type_formats <- tibble::tribble(
   ~data_type, ~col,      ~readr_abbr,
   "lgl",      "#fb9a99", "l",
   "int",      "#1f78b4", "i",

@@ -1,7 +1,7 @@
 Type: Package
 Package: FunRZ
 Title: Useful functions
-Version: 0.1.0
+Version: 0.1.1
 Author: Reto Zihlmann
 Maintainer: Reto Zihlmann <retozihlmann@outlook.com>
 Description: This package provides a wild collection of functions for data
