@@ -3,7 +3,7 @@
 #' @param l list containing all tibbles
 #' @param convention_table tibble with conventional variables
 #' @param column_headers tibble with column header descriptions
-#' @param check_l_ch_consistency [\code{logical(1)}] \cr If consistency between l and column_headers should be checked
+#' @param check_l_ch_consistency `logical(1)` \cr If consistency between l and column_headers should be checked
 #' @import checkmate
 #' @import lubridate
 #' @import forcats

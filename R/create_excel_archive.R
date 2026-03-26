@@ -143,6 +143,7 @@ create_excel_archive <- function(l, filename = "data_archive",
   ## Write Excel ##############################
   options("openxlsx2.datetimeFormat" = "yyyy-mm-dd hh:mm:ss")
   options("openxlsx2.dateFormat" = "yyyy-mm-dd")
+  options(openxlsx2.na.strings = "")
 
   ## README tab
   wb <- write_column_headers_sheet(column_headers = readme, tabname = "README")
@@ -227,9 +228,25 @@ create_excel_archive <- function(l, filename = "data_archive",
 }
 
 ## To Do:
+
+### Overall Re-desin
+## 1) reconsider the entire workflow (especially the Excel part)
+##    I think it would be better to do the following steps in R (not in Excel)
+##    * renaming
+##    * selecting the necessary variables (column `keep` in Excel)
+## 2) Where Excel could make sense?
+##    * convert characters to factors and align factor levels across entire dataset
+##    * Include `unit`, `definition`, ... for variables without convention
+
+
 # * Make 2 README files
 #    - README_tables: Description of all tables/sheets in the Excel sheet
 #    - README_columns: Description of all the columns per sheet
+# * Bug: A variable which is already originally a factor and has no "convention"
+#        It doesn't by default use the factor levels as provided by object
+#        Instead it defines a new levels and order of factors...
+#        Not sure if this is desired...? (e.g. when combining factor variables with same name but different levels?)
+# * Automatically detect, if variable is included in convention table!
 # * Allow to manually edit archive.xlsx file (README part) and paste changes later to newer version!!
 #    - VERY IMPORTANT feature
 # * Allow to provide several column_header files to create_excel_archive()

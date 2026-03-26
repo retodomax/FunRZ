@@ -10,13 +10,17 @@ FunSigStar(pval)
 \item{pval}{A p value to be expressed in asterisk notation}
 }
 \value{
-asterisk
+Vector of asterisks
 }
 \description{
-Takes any vector of p values and returnes the vector in asterisk notation
-with p<0.05 (\emph{), <0.01 (\strong{), and <0.001 (}})
+\strong{Deprecated: Use the base R functions in the example instead.} This function takes any vector of p values and returns the vector in asterisk notation
+with p<0.05 (\code{*}), <0.01 (\verb{**}), and <0.001 (\verb{***})
 }
 \examples{
-FunSigStar(0.01)
-FunSigStar(c(0.02, 0.05, 0.06))
+p <- c(0.01, 0.02, 0.05, 0.06)
+FunSigStar(p)
+
+## Can also be achieved with base functions
+format(symnum(p, cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
+              symbols = c("***", "**", "*", ".", " "), na = FALSE))
 }
